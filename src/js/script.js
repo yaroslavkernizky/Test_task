@@ -31,7 +31,7 @@
 
     //Функция для создания элемента
     function createLeaf(id, text) {
-        return '<p id="' + id + '">leaf: id = ' + id + ' text: <label>' + text + '</label></p>'
+        return '<li id="' + id + '"><p>leaf: id = ' + id + ' text: <label>' + text + '</label></p></li>'
     }
 
     //Функция для заполнения селекторов веток
@@ -136,25 +136,25 @@
 
         if (branch != '-- Выберите элемент --') {
 
-            var temp = $('#' + branch).children();
+            var temp = $('#' + branch).parent().children();
 
             temp.splice(0, 1);
 
             if (temp.length > 0) {
                 var flag = confirm('У этого элемента есть дочерние элементы! Вы хотите удалить их? \nДа - удалить. \nНет - перенести дочерние элементы ветки в ближайшую родительскую ветку');
                 if (flag) {
-                    $('#' + branch).remove();
+                    $('#' + branch).parent().remove();
                 }
                 else {
                     var parent = $('#' + branch).parent().parent();
 
-                    $('#' + branch).remove();
+                    $('#' + branch).parent().remove();
 
                     parent.append(temp);
                 }
             }
             else {
-                $('#' + branch).remove();
+                $('#' + branch).parent().remove();
             }
 
             deleteFromtreeBranches(treeBranches, branch)
@@ -206,7 +206,7 @@
 
             var text = $('#elementText').val();
 
-            var temp = $('#' + branch).append(createLeaf(id, text));
+            var temp = $('#' + branch).parent().append(createLeaf(id, text));
 
             fillSelectLeaves(treeLeaves);
         }
@@ -249,7 +249,7 @@
 
                 var temp = $('#' + leaf).remove();
 
-                var parent = $('#' + parentBranch).append(temp);
+                var parent = $('#' + parentBranch).parent().append(temp);
             }
             else {
                 alert('Необходимо выбрать элемент для переноса !!!');

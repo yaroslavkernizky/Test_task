@@ -36,6 +36,7 @@
 
     //Функция для заполнения селекторов веток
     function fillSelectBranches(treeBranches) {
+
         $('.branch').children().detach();
 
         for (var i = 0; i <= treeBranches.length; ++i) {
@@ -142,18 +143,18 @@
             if (temp.length > 0) {
                 var flag = confirm('У этого элемента есть дочерние элементы! Вы хотите удалить их? \nДа - удалить. \nНет - перенести дочерние элементы ветки в ближайшую родительскую ветку');
                 if (flag) {
-                    $('#' + branch).parent().remove();
+                    $('#' + branch).remove();
                 }
                 else {
                     var parent = $('#' + branch).parent().parent();
 
-                    $('#' + branch).parent().remove();
+                    $('#' + branch).remove();
 
                     parent.append(temp);
                 }
             }
             else {
-                $('#' + branch).parent().remove();
+                $('#' + branch).remove();
             }
 
             deleteFromtreeBranches(treeBranches, branch)

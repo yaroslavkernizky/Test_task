@@ -177,17 +177,17 @@
                         $('#' + parentBranch).append(t1);
                     }
                     else {
-                        return;
+                        
                     }
                 }
                 else if(res == 0){
-                    return;
+          
                 }
                 else {
 
-                    $('#' + childBranch).parent().remove();
+                    var temp = $('#' + childBranch).parent().remove();
 
-                    $('#' + parentBranch).append(temp);
+                    var parent = $('#' + parentBranch).append(temp);
                 }
 
                 console.log(res);
@@ -252,7 +252,7 @@
 
             if (leaf != '-- Выберите элемент --') {
 
-                var temp = $('#' + leaf).parent.remove();
+                var temp = $('#' + leaf).parent().remove();
 
                 var parent = $('#' + parentBranch).append(temp);
             }

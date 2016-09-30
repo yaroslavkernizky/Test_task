@@ -1,108 +1,86 @@
 ﻿$(document).ready(function () {
 
-    var branchesId = 4;
-    var leavesId = 4;
-
-    // Создаем и инициируем первоначальными значениями масив для хранения id веток.
-    var treeBranches = [];
-    treeBranches[0] = 'br_1';
-    treeBranches[1] = 'br_2';
-    treeBranches[2] = 'br_3';
-    treeBranches[3] = 'br_4';
-
-    // Создаем и инициируем первоначальными значениями масив для хранения id листьев.
-    var treeLeaves = [];
-    treeLeaves[0] = 'leaf_1';
-    treeLeaves[1] = 'leaf_2';
-    treeLeaves[2] = 'leaf_3';
-    treeLeaves[3] = 'leaf_4';
-
+    var branchesId = 0;
+    var leavesId = 0;
 
     //Инициируем начальными значениями селекторы для выбора веток.
-    fillSelectBranches(treeBranches);
+    fillSelectBranches();
 
     //Инициируем начальными значениями селекторы для выбора элементов.
-    fillSelectLeaves(treeLeaves);
+    fillSelectLeaves();
 
     // функция для создания ветки
     function createBranch(id) {
-        return '<ul><li id="' + id + '"><label>Branch: id = ' + id + '</label></li></ul>'
+        return '<li><ul id="' + id + '"><li><label>Branch: id = ' + id + '</label></li></ul></li>'
     }
 
     //Функция для создания элемента
     function createLeaf(id, text) {
-        return '<li id="' + id + '"><p>leaf: id = ' + id + ' text: <label>' + text + '</label></p></li>'
+        return '<li><ul id="' + id + '"><li>leaf: id = ' + id + ' text: <label>' + text + '</label></li></ul></li>'
     }
 
     //Функция для заполнения селекторов веток
-    function fillSelectBranches(treeBranches) {
-
-        $('.branch').children().detach();
-
-        for (var i = 0; i <= treeBranches.length; ++i) {
-            if (i == 0) {
-                $('.branch').append('<option>-- Выберите элемент --</option>')
-            }
-            else {
-                $('.branch').append('<option>' + treeBranches[i - 1] + '</option>')
-            }
+    function fillSelectBranches(id) {
+        if (id != undefined) {
+            $('.branch').append('<option>' + id + '</option>');
         }
     }
 
     //Функция для заполнения селектора элементов
-    function fillSelectLeaves(treeLeaves) {
-        $('#fourthSelect').children().detach();
-
-        for (var i = 0; i <= treeLeaves.length; ++i) {
-            if (i == 0) {
-                $('#fourthSelect').append('<option>-- Выберите элемент --</option>')
-            }
-            else {
-                $('#fourthSelect').append('<option>' + treeLeaves[i - 1] + '</option>')
-            }
+    function fillSelectLeaves(id) {
+        if (id != undefined) {
+            $('#fourthSelect').append('<option>' + id + '</option>');
         }
     }
 
     //Функция для заполнения селекторов веток
-    function deleteFromtreeBranches(treeBranches, val) {
+    function deleteFromtreeBranches() {
         $('.branch').children().detach();
+        $('#fourthSelect').children().detach();
 
-        for (var i = 0; i < treeBranches.length; ++i) {
-            if (treeBranches[i] == val) {
-                treeBranches.splice(i, 1);
-                break;
-            }
-        }
+        $('.branch').append('<option>-- Выберите ветку --</option>');
+        $('#fourthSelect').append('<option>-- Выберите элемент --</option>');
 
-        for (var i = 0; i <= treeBranches.length; ++i) {
-            if (i == 0) {
-                $('.branch').append('<option>-- Выберите элемент --</option>')
+        treeBranches = [];
+        treeLeaves = [];
+
+        var id;
+
+        $('ul').each(function (index, element) {
+
+            id = $(element).attr("id");
+
+            var reg = /^br_/;
+            var reg1 = /^leaf_/;
+
+            if (reg.test(id)) {
+                $('.branch').append('<option>' + id + '</option>');
             }
-            else {
-                $('.branch').append('<option>' + treeBranches[i - 1] + '</option>')
+            else if (reg1.test(id)) {
+                $('#fourthSelect').append('<option>' + id + '</option>');
             }
-        }
+        });
     }
 
     //Функция для заполнения селекторов элементов
-    function deleteFromtreeLeaves(treeLeaves, val) {
+    function deleteFromtreeLeaves() {
         $('#fourthSelect').children().detach();
+        $('#fourthSelect').append('<option>-- Выберите элемент --</option>');
 
-        for (var i = 0; i < treeLeaves.length; ++i) {
-            if (treeLeaves[i] == val) {
-                treeLeaves.splice(i, 1);
-                break;
-            }
-        }
+        treeLeaves = [];
 
-        for (var i = 0; i <= treeLeaves.length; ++i) {
-            if (i == 0) {
-                $('#fourthSelect').append('<option>-- Выберите элемент --</option>')
+        var id;
+
+        $('ul').each(function (index, element) {
+
+            id = $(element).attr("id");
+
+            var reg = /^leaf_/;
+
+            if (reg.test(id)) {
+                $('#fourthSelect').append('<option>' + id + '</option>');
             }
-            else {
-                $('#fourthSelect').append('<option>' + treeLeaves[i - 1] + '</option>')
-            }
-        }
+        });
     }
 
     //Обработчик события при нажатии кнопки добавить ветку
@@ -111,21 +89,21 @@
 
         var branch = $('#firstSelect option:selected').val();
 
-        if (branch != '-- Выберите элемент --') {
+        if (branch != "-- Выберите ветку --") {
 
             var id = 'br_' + parseInt(++branchesId);
 
-            treeBranches.push(id);
-
             var temp = $('#' + branch).append(createBranch(id));
 
-            fillSelectBranches(treeBranches);
+            fillSelectBranches(id);
         }
         else {
-            alert('Необходимо выбрать родительскую ветку !!!');
-        }
+            var id = 'br_' + parseInt(++branchesId);
 
-        console.log(treeBranches);
+            var temp = $('#tree').append(createBranch(id));
+
+            fillSelectBranches(id);
+        }
     });
 
     //Обработчик события при нажатии кнопки удалить ветку
@@ -136,12 +114,12 @@
 
         if (branch != '-- Выберите элемент --') {
 
-            var temp = $('#' + branch).parent().children();
+            var temp = $('#' + branch).children();
 
             temp.splice(0, 1);
 
             if (temp.length > 0) {
-                var flag = confirm('У этого элемента есть дочерние элементы! Вы хотите удалить их? \nДа - удалить. \nНет - перенести дочерние элементы ветки в ближайшую родительскую ветку');
+                var flag = confirm('У этого элемента есть дочерние элементы! Вы хотите удалить их? \nOk - удалить. \nОтмена - перенести дочерние элементы ветки в ближайшую родительскую ветку');
                 if (flag) {
                     $('#' + branch).parent().remove();
                 }
@@ -157,13 +135,12 @@
                 $('#' + branch).parent().remove();
             }
 
-            deleteFromtreeBranches(treeBranches, branch)
+            deleteFromtreeBranches();
         }
         else {
             alert('Необходимо выбрать ветку для удаления !!!');
         }
 
-        console.log(treeBranches);
     });
 
     //Обработчик события при нажатии кнопки переместить ветку
@@ -178,9 +155,42 @@
 
             if (childBranch != '-- Выберите элемент --') {
 
-                var temp = $('#' + childBranch).parent().remove();
+                var parentNode = document.getElementById(parentBranch);
+                var childtNode = document.getElementById(childBranch);
 
-                var parent = $('#' + parentBranch).append(temp);
+                var res = parentNode.compareDocumentPosition(childtNode);
+
+                if (res == 10) {
+                    var flag = confirm('Вы действительно хотите перенести родительский элемент в его дочернюю ветку ? \nОк - да, перенести. \nОтмена - нет, отказаться');
+                    if (flag) {
+
+                        var temp = $('#' + childBranch).children();
+
+                        temp.splice(0, 1);                    
+
+                        var parent = $('#' + childBranch).parent().parent();
+
+                        var t1 = $('#' + childBranch).parent().remove();
+
+                        parent.append(temp);
+
+                        $('#' + parentBranch).append(t1);
+                    }
+                    else {
+                        return;
+                    }
+                }
+                else if(res == 0){
+                    return;
+                }
+                else {
+
+                    $('#' + childBranch).parent().remove();
+
+                    $('#' + parentBranch).append(temp);
+                }
+
+                console.log(res);
             }
             else {
                 alert('Необходимо выбрать ветку для переноса !!!');
@@ -202,18 +212,15 @@
 
             var id = 'leaf_' + parseInt(++leavesId);
 
-            treeLeaves.push(id);
-
             var text = $('#elementText').val();
 
-            var temp = $('#' + branch).parent().append(createLeaf(id, text));
+            var temp = $('#' + branch).append(createLeaf(id, text));
 
-            fillSelectLeaves(treeLeaves);
+            fillSelectLeaves(id);
         }
         else {
             alert('Необходимо выбрать родительскую ветку !!!');
         }
-        console.log(treeLeaves);
     });
 
     //Обработчик события при нажатии кнопки удалить элемент
@@ -224,15 +231,13 @@
 
         if (leaf != '-- Выберите элемент --') {
 
-            $('#' + leaf).remove();
+            $('#' + leaf).parent().remove();
 
-            deleteFromtreeLeaves(treeLeaves, leaf)
+            deleteFromtreeLeaves()
         }
         else {
             alert('Необходимо выбрать элемент для удаления !!!');
         }
-
-        console.log(treeLeaves);
     });
 
     //Обработчик события при нажатии кнопки переместить элемент
@@ -247,9 +252,9 @@
 
             if (leaf != '-- Выберите элемент --') {
 
-                var temp = $('#' + leaf).remove();
+                var temp = $('#' + leaf).parent.remove();
 
-                var parent = $('#' + parentBranch).parent().append(temp);
+                var parent = $('#' + parentBranch).append(temp);
             }
             else {
                 alert('Необходимо выбрать элемент для переноса !!!');
